@@ -18,21 +18,22 @@ public class MainActivity extends AppCompatActivity {
         EditText inputMatrikelnummer = findViewById(R.id.inputMatrikelnummer);
         TextView serverAnswer = findViewById(R.id.serverAnswer);
         Button submitButton = findViewById(R.id.submitButton);
+        Button calculateButton = findViewById(R.id.calculateButton);
 
         submitButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String matrikelnr = inputMatrikelnummer.getText().toString();
-                TCPClient client = new TCPClient(matrikelnr);
+                String matrikelnr = inputMatrikelnummer.getText().toString();   //get input from textfield
+                TCPClient client = new TCPClient(matrikelnr);   //create new client and give matrikelnummer as parameter
 
                 Thread t = new Thread(client);
-                t.start();
+                t.start();  //start thread
                 try {
-                    t.join();
+                    t.join();   //wait until thread gets terminated, this means the answer from server should be saved in 'client.serverAnswer'
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                serverAnswer.setText(client.serverAnswer);
+                serverAnswer.setText(client.serverAnswer);  //set textfield to display the answer of the server
             }
         });
     }
