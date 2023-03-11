@@ -16,11 +16,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         EditText inputMatrikelnummer = findViewById(R.id.inputMatrikelnummer);
-        TextView serverAnswer = findViewById(R.id.serverAnswer);
+        TextView answerField = findViewById(R.id.answerField);
         Button submitButton = findViewById(R.id.submitButton);
         Button calculateButton = findViewById(R.id.calculateButton);
 
-        submitButton.setOnClickListener(new View.OnClickListener() {
+        submitButton.setOnClickListener(new View.OnClickListener() {    //add onClickListener to submit button
             @Override
             public void onClick(View view) {
                 String matrikelnr = inputMatrikelnummer.getText().toString();   //get input from textfield
@@ -33,8 +33,29 @@ public class MainActivity extends AppCompatActivity {
                 } catch (InterruptedException e) {
                     throw new RuntimeException(e);
                 }
-                serverAnswer.setText(client.serverAnswer);  //set textfield to display the answer of the server
+                answerField.setText(client.serverAnswer);  //set textfield to display the answer of the server
             }
         });
+
+        calculateButton.setOnClickListener((new View.OnClickListener() {    //add onClickListener to calculate button
+            @Override
+            public void onClick(View view) {
+                String matrikelnr = inputMatrikelnummer.getText().toString();   //get matrikelnummer from input field
+                int crossSum = calculateCrossSum(matrikelnr);   //calculate cross sum of input
+
+                String binaryResult = Integer.toBinaryString(crossSum); //convert crossSum to binary
+
+                answerField.setText(binaryResult);  //set textfield to display the calculation result
+            }
+        }));
+    }
+
+    private int calculateCrossSum(String matrikelnr) {
+        int result = 0;
+        for(int i = 0; i < matrikelnr.length(); i++){   //iterate over matrikelnummer
+            int digit = Character.getNumericValue(matrikelnr.charAt(i));    //get numeric value of digits
+            result += digit;    //increment result by the digits
+        }
+        return result;
     }
 }
